@@ -1,0 +1,201 @@
+import React from 'react';
+import { Modal, Table, Row, Col, message } from 'antd';
+import {connect} from 'dva';
+import {AssetDetails, HistoryMassion} from '../../../services/api';
+import {formatTime} from '../../../utils/timeUtil';
+import {getShowText} from '../../../utils/utils';
+
+class HistoryTaskManage extends React.Component {
+  state = {
+    List: [],
+    flag: false,
+  };
+  componentDidMount() {
+    this.fetchData();
+  }
+  fetchData = () => { // 请求需要确认的任务信息
+    HistoryMassion()
+      .then((response) => {
+        this.setState({List: response});
+      });
+  };
+  showAssetDetail = (item) => { // 显示资产详情时调用
+    AssetDetails(item.aid)
+      .then((response) => {
+        if (Object.prototype.toString.call(response) === '[object Object]') {
+          response.accepterName = item.accepterName;
+          this.setState({flag: false});
+          this.AssetDetailContent(response);
+        } else {
+          this.setState({flag: true});
+          this.AssetDetailContent({});
+        }
+      });
+  };
+  AssetDetailContent = (data) => {
+    if (this.state.flag) {
+      return message.error('对不起该资产已被管理员删除');
+    } else {
+      Modal.info({
+        title: '资产详情',
+        width: '700px',
+        content: (
+          <div>
+            <Row>
+              <Col span={12}>
+                <div>
+                  <span>使用人:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.tuser}</div>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div>
+                  <span>分配后使用人:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.accepterName}</div>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <div>
+                  <span>类型:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.type}</div>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div>
+                  <span>采购日期:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{formatTime(data.procureDate)}</div>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <div>
+                  <span>到货日期:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{formatTime(data.arriveDate)}</div>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div>
+                  <span>品牌:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.brand}</div>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <div>
+                  <span>型号:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.modelNum}</div>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div>
+                  <span>品名:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.brandName}</div>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <div>
+                  <span>MAC地址:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.macAddress}</div>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div>
+                  <span>快速服务码:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.quickCode}</div>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <div>
+                  <span>序列号:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.serial}</div>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div>
+                  <span>单价:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.price}</div>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <div>
+                  <span>固定资产编号:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.inventarNum}</div>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div>
+                  <span>备注:</span>
+                  <div style={{display: 'inline-block', marginLeft: 5}}>{data.remarks}</div>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        ),
+      });
+    }
+  };
+  render() {
+    const {List} = this.state;
+    const getShowTextStatus = (val) => {
+      if (val === '接受') {
+        return (
+          <span style={{color: '#11ee55'}}>已接收</span>
+        );
+      } else {
+        return (
+          <span style={{color: 'red'}}>已拒绝</span>
+        );
+      }
+    };
+    const columns = [
+      {title: '发起人', dataIndex: 'initarorName', render: val => <span>{getShowText(val)}</span>},
+      {title: '接收人', dataIndex: 'accepterName', render: val => <span>{getShowText(val)}</span>},
+      {
+        title: '分配时间',
+        dataIndex: 'initDate',
+        render: val => <span> {formatTime(val)} </span>,
+      },
+      {
+        title: '确认时间',
+        dataIndex: 'acceptDate',
+        render: val => <span> {formatTime(val)} </span>,
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        render: val => (getShowTextStatus(val)),
+      },
+      {
+        title: '操作',
+        render: item => (
+          <div>
+            <a onClick={() => this.showAssetDetail(item)}>资产详情</a>
+          </div>
+        ),
+      },
+    ];
+    return (
+      <div >
+        <Table
+          rowKey={record => record.mid}
+          columns={columns}
+          dataSource={List}
+        />
+      </div>
+    );
+  }
+}
+
+export default connect(state => ({
+  asset: state.asset,
+}))(HistoryTaskManage);

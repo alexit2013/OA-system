@@ -1,0 +1,72 @@
+@import "~antd/lib/style/themes/default.less";
+
+.tips {
+  padding-right: 20px;
+  display: inline-block;
+  span {
+    display: inline;
+    margin-right: 15px;
+  }
+}
+
+.content {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 13px;
+  table {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    tr {
+      td {
+        border-bottom: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        padding: 3px 5px;
+      }
+      th {
+        border-bottom: 2px solid #ccc;
+        text-align: center;
+        border-right: 1px solid #ccc;
+        padding: 3px 5px;
+      }
+    }
+  }
+}
+
+.comment {
+  margin-left: 20px;
+  .commentInput {
+    width: 50%;
+    margin-bottom: 20px;
+    display: flex;
+    .commentAdd {
+      display: inline;
+    }
+    .commentBtn {
+      display: inline;
+      margin-left: 10px;
+    }
+  }
+  .commentCount {
+    color: rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+  .text {
+    margin-bottom: 8px;
+    .commentTile {
+      display: inline-block;
+      color: rgba(0, 0, 0, 0.5);
+      .commentAuthor {
+        display: inline;
+      }
+      .commentDate {
+        display: inline;
+        margin-left: 10px;
+      }
+    }
+    .commentContent {
+      color: rgba(0, 0, 0, 0.6);
+      font-size: 13px;
+    }
+  }
+}

@@ -1,0 +1,134 @@
+@import "~antd/lib/style/themes/default.less";
+@import "../../utils/utils.less";
+
+.listContent {
+  .description {
+    line-height: 22px;
+    max-width: 720px;
+  }
+  .extra {
+    color: @text-color-secondary;
+    margin-top: 16px;
+    line-height: 22px;
+    & > :global(.ant-avatar) {
+      vertical-align: top;
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
+      position: relative;
+      top: 1px;
+    }
+    & > em {
+      color: @disabled-color;
+      font-style: normal;
+      margin-left: 16px;
+    }
+  }
+}
+a.listItemMetaTitle {
+  color: @heading-color;
+}
+.listItemExtra {
+  width: 272px;
+  height: 1px;
+}
+.selfTrigger {
+  margin-left: 12px;
+}
+
+@media screen and (max-width: @screen-xs) {
+  .selfTrigger {
+    display: block;
+    margin-left: 0;
+  }
+  .listContent {
+    .extra {
+      & > em {
+        display: block;
+        margin-left: 0;
+        margin-top: 8px;
+      }
+      .createDate {
+        margin-left: 16px;
+      }
+    }
+  }
+}
+@media screen and (max-width: @screen-md) {
+  .selfTrigger {
+    display: block;
+    margin-left: 0;
+  }
+}
+@media screen and (max-width: @screen-lg) {
+  .listItemExtra {
+    width: 0;
+    height: 1px;
+  }
+}
+.sider {
+  background-color: #fff;
+}
+.main {
+  background-color: white;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.listItemContainer {
+  .docTitle {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .tagContainer {
+    flex-direction: row;
+    .tagBorder {
+      margin-right: 10px;
+      .tag {
+        font-size: 15px;
+      }
+    }
+  }
+
+  .detailContainer {
+    flex-direction: row;
+
+    .userIcon {
+      margin-left: 10px;
+    }
+    .userName {
+      margin-left: 5px;
+    }
+    .createTimeLabel {
+      margin-left: 25px;
+    }
+    .createTimeText {
+      margin-left: 5px;
+    }
+    .downloadIcon {
+      margin-left: 25px;
+    }
+    .downloadCount {
+      margin-left: 5px;
+    }
+    .viewCountIcon {
+      margin-left: 25px;
+    }
+    .viewCount {
+      margin-left: 5px;
+    }
+  }
+}
+
+.itemMetaTitle {
+  margin-bottom: 0;
+}
+
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}

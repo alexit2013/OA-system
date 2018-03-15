@@ -1,0 +1,89 @@
+@import "~antd/lib/style/themes/default.less";
+
+.main {
+  background-color: white;
+
+  .searchContainer {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+
+    .searchText {
+      font-size: 24px;
+      font-weight: 700;
+      margin-right: 20px;
+    }
+    .searchInput {
+      width: 350px;
+    }
+    .searchButton {
+      transform: translateY(-6px);
+    }
+    .resetButton {
+      transform: translateY(-6px);
+    }
+  }
+
+  .sider {
+    background-color: white;
+  }
+
+  .list {
+    margin-top: 35px;
+    margin-left: 80px;
+    margin-right: 80px;
+  }
+
+  .pagination {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .listItemContainer {
+    .docTitle {
+      color: @heading-color;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .tagContainer {
+      flex-direction: row;
+      .tagBorder {
+        margin-right: 10px;
+        .tag {
+          font-size: 15px;
+        }
+      }
+    }
+
+    .detailContainer {
+      flex-direction: row;
+
+      .userIcon {
+        margin-left: 10px;
+      }
+      .userName {
+        margin-left: 5px;
+      }
+      .createTimeLabel {
+        margin-left: 25px;
+      }
+      .createTimeText {
+        margin-left: 5px;
+      }
+      .downloadIcon {
+        margin-left: 25px;
+      }
+      .downloadCount {
+        margin-left: 5px;
+      }
+      .viewCountIcon {
+        margin-left: 25px;
+      }
+      .viewCount {
+        margin-left: 5px;
+      }
+    }
+  }
+}
