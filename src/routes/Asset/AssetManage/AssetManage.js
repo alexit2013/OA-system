@@ -199,7 +199,7 @@ class AssetManage extends React.Component {
       payload: emId,
     });
   };
-  showDeleteConfirm = function () {
+  showDeleteConfirm = () => {
     const object = {
       title: '确定要删除吗？',
       okText: '确定',
@@ -211,9 +211,7 @@ class AssetManage extends React.Component {
     };
     object.onOk = () => {this.batchDelete(this.state.emIds)};
     confirm(object);
-
-  }.bind(this);
-
+  };
   handleSeleteSearch = (value) => { // 选中数据时调用
     if (value.trim() === '') {
       this.props.dispatch({
@@ -236,7 +234,7 @@ class AssetManage extends React.Component {
       return (
         <div>
           <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteAsset(item.aid)}>
-              <a>删除</a>
+            <a>删除</a>
           </Popconfirm>
           <Divider type="vertical"/>
           <Tooltip title="点击完成编辑、分配资产等操作">

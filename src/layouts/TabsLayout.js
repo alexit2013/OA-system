@@ -169,12 +169,12 @@ class TabsLayout extends React.PureComponent {
 
   renderNotification = () => {
     const data = dataNotice();
-    const onItemClick = (item, tabProps) => {
-      // console.log(item,tabProps);
-    }
-    const onClear = (tabTitle) => {
-      // console.log('tabTitle: ',tabTitle);
-    }
+    // const onItemClick = (item, tabProps) => {
+    //   console.log(item, tabProps);
+    // }
+    // const onClear = (tabTitle) => {
+    //   console.log('tabTitle: ', tabTitle);
+    // }
     function getNoticeData(notices) {
       if (notices.length === 0) {
         return {};

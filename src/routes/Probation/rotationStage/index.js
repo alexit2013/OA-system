@@ -4,7 +4,7 @@ import {routerRedux} from 'dva/router';
 import {isEmpty} from 'lodash';
 import moment from 'moment';
 import { Steps, Button, message, Input, Form, Radio, Icon, DatePicker } from 'antd';
-import {postGoal, queryLike, postAuthor, postSummarize, postEvaluate, postConfirm} from '../../../services/api';
+import {postGoal, queryLike, postAuthor, postSummarize, postEvaluate, postConfirm, returntosummarize} from '../../../services/api';
 import {formatTimeLess} from '../../../utils/timeUtil';
 import styles from './style.less';
 
@@ -12,6 +12,7 @@ const FormItem = Form.Item;
 const {TextArea} = Input;
 const {Step} = Steps;
 const RadioGroup = Radio.Group;
+let stepRecord = [];
 // const {confirm} = Modal;
 
 
@@ -136,10 +137,11 @@ class StepForm extends React.Component {
     e.preventDefault();
     const {probation: {probationInfo}} = this.props;
     probationInfo.trainRecord.summarize = e.target.summarize.value;
+    probationInfo.stepRecords = stepRecord;
     if (e.target.summarize.value === '') {
       this.setState({summarize: '请输入结果'});
     } else {
-      postSummarize(probationInfo.trainRecord)
+      postSummarize(probationInfo)
         .then((res) => {
           if (res.status === 'ok') {
             message.success('提交成功！');
@@ -187,6 +189,17 @@ class StepForm extends React.Component {
           }
         });
     }
+  }
+  returnEvaluatecomment = () => {
+    const {probation: {probationInfo}} = this.props;
+    const idNo = probationInfo.trainRecord.id;
+    returntosummarize(idNo)
+      .then((res) => {
+        console.log('res: ', res);
+        if (res.status === 'ok') {
+          this.props.dispatch(routerRedux('/tabs/probation/probation-table'));
+        }
+      });
   }
   handleSubmitStep5 = () => {
     const {probation: {probationInfo}} = this.props;
@@ -305,6 +318,12 @@ class StepForm extends React.Component {
       <span className={styles.verify}>{messages}</span>
     );
   }
+  inputChange = (e) => {
+    const tag = e.target.name;
+    const tagValue = e.target.value;
+    stepRecord[tag].result = tagValue;
+    console.log('stepRecord: ', stepRecord);
+  }
   changeVerify = (e) => { // 主管评语的onChange事件
     const resultValue = e.target.name;
     if (e.target.value !== '') {
@@ -417,8 +436,7 @@ class StepForm extends React.Component {
               <td className={styles.bgcolor} colSpan="8">试用期总体目标</td>
             </tr>
             <tr>
-              <td colSpan="8">
-                {/* <TextArea value={probationInfo.trainPlan.totalgoal} style={{paddingLeft: '5px'}} autosize={{ minRows: 2, maxRows: 10 }} disabled/> */}
+              <td colSpan="8" height="35">
                 {probationInfo.trainPlan.totalgoal}
               </td>
             </tr>
@@ -525,7 +543,7 @@ class StepForm extends React.Component {
                   </td>
                 </tr>
                 <tr height="35" align="center">
-                  <td colSpan="2">序号</td>
+                  <td colSpan="2" width="121">序号</td>
                   <td colSpan="4">具体措施</td>
                   <td colSpan="1">责任人</td>
                   <td colSpan="1">完成时间</td>
@@ -1110,10 +1128,10 @@ class StepForm extends React.Component {
     //   );
     // }
   }
-  dataMap = (sheet = 'none') => {
+  dataMap = (sheet = 'none', isValue = false) => {
     const {probation: {probationInfo}} = this.props;
     if (!isEmpty(probationInfo)) {
-      return probationInfo.stepRecords.map((it) => {
+      return probationInfo.stepRecords.map((it, i) => {
         if (it.activity === null) {
           return null;
         }
@@ -1132,7 +1150,9 @@ class StepForm extends React.Component {
               {formatTimeLess(it.plan)}
             </td>
             <td colSpan="1" align="center" className={styles.cuoshi} style={{display: sheet}}>
-              <Input placeholder="请输入完成情况" style={{border: 'none'}}/>
+              {
+                isValue ? it.result : <Input name={i} placeholder="请输入完成情况" style={{border: 'none'}} onChange={this.inputChange}/>
+              }
             </td>
           </tr>
         );
@@ -1147,7 +1167,7 @@ class StepForm extends React.Component {
           <table border="1" style={{width: '90%', margin: '0 auto'}}>
             <tbody>
               <tr>
-                <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}}>序号</td>
+                <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}} width="121">序号</td>
                 <td colSpan="4" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600', width: '200px'}}>具体措施</td>
                 <td colSpan="2" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600', width: '100px'}}>责任人</td>
                 <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600', width: '200px'}}>完成时间</td>
@@ -1188,6 +1208,7 @@ class StepForm extends React.Component {
   }
   step3 = () => { // 员工总结环节页面显示代码
     const {probation: {probationInfo}} = this.props;
+    stepRecord = probationInfo.stepRecords;
     if (!isEmpty(probationInfo)) {
       return (
         <div className={styles.content}>
@@ -1196,7 +1217,7 @@ class StepForm extends React.Component {
             <table border="1" style={{width: '90%', margin: '0 auto'}}>
               <tbody>
                 <tr>
-                  <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}}>序号</td>
+                  <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}} width="121">序号</td>
                   <td colSpan="4" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600', width: '100px'}}>具体措施</td>
                   <td colSpan="2" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}}>责任人</td>
                   <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600', width: '200px'}}>完成时间</td>
@@ -1241,13 +1262,13 @@ class StepForm extends React.Component {
             <table border="1" style={{width: '90%', margin: '0 auto'}}>
               <tbody>
                 <tr>
-                  <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}}>序号</td>
+                  <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}} width="121">序号</td>
                   <td colSpan="4" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600', width: '100px'}}>具体措施</td>
                   <td colSpan="2" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}}>责任人</td>
                   <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600', width: '200px'}}>完成时间</td>
                   <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600', width: '200px'}}>完成情况</td>
                 </tr>
-                {this.dataMap('block')}
+                {this.dataMap('inlineBlock', true)}
                 <tr><td className={styles.bgcolor} colSpan="9">员工总结</td></tr>
                 <tr height="35">
                   <td colSpan="9" >
@@ -1374,7 +1395,7 @@ class StepForm extends React.Component {
           <table border="1" style={{width: '90%', margin: '0 auto'}}>
             <tbody>
               <tr>
-                <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}}>序号</td>
+                <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}} width="121">序号</td>
                 <td colSpan="4" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}}>具体措施</td>
                 <td colSpan="2" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}}>责任人</td>
                 <td colSpan="1" align="center" className={styles.cuoshi} style={{fontSize: '15px', fontWeight: '600'}}>完成时间</td>
@@ -1475,6 +1496,9 @@ class StepForm extends React.Component {
         current = 1;
       } else if (probationInfo.trainRecord.status === '待员工阶段总结') {
         current = 2;
+        if (probationInfo.trainRecord.evaluateResult === '驳回') {
+          stepStatus = 'error';
+        }
       } else if (probationInfo.trainRecord.status === '待主管评价') {
         current = 3;
       } else if (probationInfo.trainRecord.status === '待员工确认') {

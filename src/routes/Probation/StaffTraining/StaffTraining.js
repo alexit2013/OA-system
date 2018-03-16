@@ -1,9 +1,10 @@
 import React from 'react';
 import {routerRedux} from 'dva/router';
 import { connect } from 'dva';
-import {Table, Badge, Icon, message, Modal, Button, Input, Popconfirm} from 'antd';
+import {Table, Badge, Icon, message, Modal, Button, Input} from 'antd';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
-import TableProbation from '../../../components/Table/Table';
+import { becomeRegalar} from '../../../services/api';
+
 
 const {confirm} = Modal;
 const {Search} = Input;
@@ -15,7 +16,7 @@ let j = 0;
 class StaffTraining extends React.Component {
   state = {
     emIds: [],
-    flag: '',
+    // flag: '',
   }
   componentDidMount() {
     this.fetchData();
@@ -88,17 +89,39 @@ class StaffTraining extends React.Component {
         />
       </div>
     );
-  }
+  };
+  showConfirm = (item) => { //  批量删除时弹出的modal
+    const object = {
+      title: '确定要转正吗？',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onCancel() {
+        console.log('ok');
+      },
+    };
+    object.onOk = () => {
+      const id = item.trainRecords[0].emid;
+      becomeRegalar(id)
+        .then((res) => {
+          if (res.status === 'ok') {
+            message.success('操作成功！');
+            this.fetchData();
+          }
+        });
+    };
+    confirm(object);
+  };
   render() {
     j = 0;
     const {probation: {probationList, loading}} = this.props;
     const expandedRowRender = () => {
       const childColumns = [
-        { title: '培养阶段', dataIndex: 'phase', key: 'phase', width: '100' },
-        { title: '当前状态', key: 'status', render: item => <span><Badge status={item.status === '完成' ? 'success' : 'error'} />{item.status}</span> , width: '250px'},
+        { title: '培养阶段', dataIndex: 'phase', key: 'phase', width: '100'},
+        { title: '当前状态', key: 'status', render: item => <span><Badge status={item.status === '完成' ? 'success' : 'error'} />{item.status}</span>, width: '250px'},
         { title: '评价结果', dataIndex: 'rank', key: 'rank' },
         {
-          title: '主管评语', 
+          title: '主管评语',
           key: 'authorresult',
           width: '300px',
           render: item => (
@@ -127,15 +150,15 @@ class StaffTraining extends React.Component {
       if (j === probationList.length - 1) {
         j = 0;
       }
-      const cbKeys = (keys) => {
-        console.log('keys', keys);
-        this.setState({
-          emIds: [...keys],
-        });
-      };
+      // const cbKeys = (keys) => {
+      //   console.log('keys', keys);
+      //   this.setState({
+      //     emIds: [...keys],
+      //   });
+      // };
       return (
-        <TableProbation
-          cbKeys={cbKeys}
+        <Table
+          // cbKeys={cbKeys}
           rowKey={record => record.id}
           pagination={false}
           columns={childColumns}
@@ -161,10 +184,8 @@ class StaffTraining extends React.Component {
       { title: '评价结果', dataIndex: 'result', key: 'result' },
       {
         title: '操作',
-        render: () => (
-          <Popconfirm placement="top" title="确定转正吗？" onConfirm={confirm} okText="Yes" cancelText="No">
-            <a>转正</a>
-          </Popconfirm>
+        render: item => (
+          <a onClick={() => this.showConfirm(item)}>转正</a>
         ),
       },
     ];

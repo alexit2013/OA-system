@@ -146,10 +146,9 @@ export default {
       yield put({
         type: 'changeLoading',
         payload: false,
-      })
+      });
     },
     * assetAlloc({payload}, {call, put, select}) {
-      console.log('payload: ', payload);
       yield put({
         type: 'changeLoading',
         payload: true,

@@ -109,7 +109,7 @@ export default {
     * search({payload}, {put}) {
       yield put({
         type: 'saveUserListToRedux',
-        payload: payload,
+        payload,
       });
     },
     * sortUser({payload}, {put, call}) {

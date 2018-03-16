@@ -16,4 +16,4 @@ export const filtrate = (arr, str) => {
     }
   });
   return reaultArr;
-}
+};

@@ -36,7 +36,6 @@ class TaskManage extends React.Component {
   };
   AssetDetailContent = (data) => {
     if (this.state.flag) {
-      console.log(this.state.flag);
       return message.error('对不起该资产已被管理员删除');
     } else {
       Modal.info({

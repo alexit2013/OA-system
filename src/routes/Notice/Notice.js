@@ -23,10 +23,6 @@ class Notice extends React.Component {
       type: 'notice/queryNotices',
     });
   }
-  componentWillUnmount() {
-    // // nav数据强制刷新的临时方案
-    // location.reload();
-  }
   handlerClickDetail = (item) => {
     this.props.dispatch(routerRedux.push({
       pathname: `/tabs/notice/detail/${item.id}`,

@@ -356,7 +356,7 @@ export const saveQualificationDraft = async (params) => { // 保存资格面试�
   });
 };
 
-export const saveSynthesizeInviter = async (params) => { // 保存综合面试信息 
+export const saveSynthesizeInviter = async (params) => { // 保存综合面试信息
   return request('/api/resource/saveSynthesize', {
     method: 'POST',
     body: params,
@@ -611,6 +611,12 @@ export const batchDeleteProbation = async (ids) => { // 批量删除培养阶段
 
 export const returntosummarize = async (id) => { // 主管驳回员工总结
   return request(`/api/trainrecord/returntosummarize/${id}`, {
+    method: 'GET',
+  });
+};
+
+export const becomeRegalar = async (id) => { // 转正
+  return request(`/api/trainplan/becomeRegular/${id}`, {
     method: 'GET',
   });
 };

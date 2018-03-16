@@ -2,7 +2,6 @@ import React from 'react';
 import {Layout, Menu, Icon} from 'antd';
 import {Link} from 'dva/router';
 import {isEmpty, chain} from 'lodash';
-import {queryCurrentUser} from '../../services/api';
 import styles from './Invite.less';
 import {getFirstMatchedChildName, renderRoute} from '../../utils/routeUtil';
 import {isHr, isAdmin} from '../../utils/authority';
