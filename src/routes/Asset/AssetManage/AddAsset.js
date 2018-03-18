@@ -136,9 +136,9 @@ class AddAsset extends React.Component {
   isButton = () => {
     const {getFieldsError} = this.props.form;
     return (
-      <div >
+      <div style={{float: 'left'}}>
         <Button
-          style={{width: '90px'}}
+          style={{width: '150px'}}
           type="primary"
           htmlType="submit"
           disabled={hasErrors(getFieldsError())}
@@ -146,7 +146,7 @@ class AddAsset extends React.Component {
           提交
         </Button>
         <Button
-          style={{width: '90px', marginLeft: '3px'}}
+          style={{width: '150px', marginLeft: '3px'}}
           type="primary"
           onClick={() => this.props.history.goBack()}
         >
@@ -448,9 +448,7 @@ class AddAsset extends React.Component {
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...submitFormLayout}>
-              {this.isButton(disabled)}
-            </FormItem>
+            {}
           </Col>
           <Col span={8}>
             <FormItem
@@ -465,6 +463,7 @@ class AddAsset extends React.Component {
             </FormItem>
           </Col>
         </Row>
+        {this.isButton(disabled)}
       </Form>
     );
   }

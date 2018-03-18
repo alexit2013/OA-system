@@ -37,7 +37,7 @@ class VerifyTaskManage extends React.Component {
       });
   };
   AssetDetailContent = (data) => {
-    console.log(this.state.flag);
+    // console.log(this.state.flag);
     if (this.state.flag) {
       return message.error('对不起该资产已被管理员删除');
     } else {
@@ -150,7 +150,7 @@ class VerifyTaskManage extends React.Component {
     }
   };
   accept = (item) => {
-    console.log('item: ', item);
+    // console.log('item: ', item);
     const status = {// 当点击确认键后发送确认信息
       ...item,
       status: '接受',

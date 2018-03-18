@@ -76,7 +76,6 @@ class AssetManage extends React.Component {
       filterDropdownVisible: false,
       filtered: !!searchText,
     });
-    console.log('dataAsset: ', dataAsset);
     const sortAsset = dataAsset.map((record) => {
       const match = record.tuser.match(reg);
       if (!match) {
@@ -84,7 +83,6 @@ class AssetManage extends React.Component {
       }
       return record;
     }).filter(record => !!record);
-    console.log('sortAsset: ', sortAsset);
     this.props.dispatch({
       type: 'asset/filtrate',
       payload: sortAsset,

@@ -145,7 +145,7 @@ class InviteTech extends React.Component {
     const {qualInfo, qualNumber} = this.state;
     const fileInfo = this.state.fileList[0];
     this.props.form.validateFields((err, values) => {
-      console.log('values.papersVaildate1', values.papersVaildate1);
+      // console.log('values.papersVaildate1', values.papersVaildate1);
       let papersVaildate1 = '';
       if (values.papersVaildate1 !== undefined) {
         papersVaildate1 = values.papersVaildate1.join(',');

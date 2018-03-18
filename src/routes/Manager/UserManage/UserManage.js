@@ -29,7 +29,7 @@ class UserManage extends React.Component {
     dispatch(routerRedux.push('/tabs/manager/user-manage/user-add'));
   };
   editUser = (emId) => {
-    console.log('emid: ', emId);
+    // console.log('emid: ', emId);
     const {dispatch} = this.props;
     dispatch(routerRedux.push({
       pathname: '/tabs/manager/user-manage/user-add',
@@ -111,7 +111,7 @@ class UserManage extends React.Component {
   //   })
   // }
   handleSeleteSearch = (value) => { // 选中数据时调用
-    console.log('value: ', value);
+    // console.log('value: ', value);
     if (value) {
       if (value.trim() === '') {
         return null;

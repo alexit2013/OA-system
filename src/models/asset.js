@@ -34,7 +34,6 @@ export default {
         type: 'changeLoading',
         payload: true,
       });
-      console.log('payload: ', payload);
       yield put({
         type: 'saveAssetListToRedux',
         payload,
@@ -98,7 +97,6 @@ export default {
         payload,
       });
     },
-////////////////////////////////////////////////////////////////////////////////// sadfasfas ///////////////////////////////////
     * batchOperation({payload}, {put, call, select}) {
       yield put({
         type: 'changeLoading',
@@ -110,13 +108,14 @@ export default {
       } else if (payload.name === 'delete') {
         yield call(batchRefuse, body);
       }
-      const list = yield select(state => state.asset.list);
+      const list = yield select(state => state.asset.verifylist);
+      const bodyArr = yield body.split(',');
       yield put({
-        type: 'saveAssetListToRedux',
+        type: 'saveAssetVerifyListToRedux',
         payload: [...list].filter((it) => {
           let flag = false;
-          for (let i = 0; i < payload.length; i += 1) {
-            if (it.mid === payload.body[i]) {
+          for (let i = 0; i < bodyArr.length; i += 1) {
+            if (it.mid === bodyArr[i]) {
               flag = true;
             }
           }
@@ -146,22 +145,22 @@ export default {
         payload: false,
       });
     },
-    * assetAlloc({payload}, {call, put, select}) {
-      yield put({
-        type: 'changeLoading',
-        payload: true,
-      });
-      yield call(AssetAllocStatus, payload);
-      const list = yield select(state => state.asset.verifylist); // state来源于全局state,select 用于获取全局的namespace;
-      yield put({
-        type: 'saveAssetVerifyListToRedux',
-        payload: [...list].filter(it => it.mid !== payload.mid),
-      });
-      yield put({
-        type: 'changeLoading',
-        payload: false,
-      });
-    },
+    // * assetAlloc({payload}, {call, put, select}) {
+    //   yield put({
+    //     type: 'changeLoading',
+    //     payload: true,
+    //   });
+    //   yield call(AssetAllocStatus, payload);
+    //   const list = yield select(state => state.asset.verifylist); // state来源于全局state,select 用于获取全局的namespace;
+    //   yield put({
+    //     type: 'saveAssetVerifyListToRedux',
+    //     payload: [...list].filter(it => it.mid !== payload.mid),
+    //   });
+    //   yield put({
+    //     type: 'changeLoading',
+    //     payload: false,
+    //   });
+    // },
 
     * saveAsset({payload}, {call, put}) {
       yield call(addAsset, payload);

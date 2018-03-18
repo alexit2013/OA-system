@@ -33,9 +33,9 @@ class HistoryTaskManage extends React.Component {
         }
       });
   };
-  filter = (pagination, filters, sorter) => {
-    console.log('pagination: ', pagination, 'filters: ', filters, 'sorter: ', sorter);
-  }
+  // filter = (pagination, filters, sorter) => {
+  //   console.log('pagination: ', pagination, 'filters: ', filters, 'sorter: ', sorter);
+  // }
   AssetDetailContent = (data) => {
     if (this.state.flag) {
       return message.error('对不起该资产已被管理员删除');

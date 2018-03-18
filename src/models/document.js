@@ -20,7 +20,6 @@ export default {
       });
 
       const docList = yield call(queryDocList, payload);
-      // console.log('document model, fetchList:', docList);
       yield put({
         type: 'setListData',
         payload: docList,

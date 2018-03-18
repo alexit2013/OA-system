@@ -42,7 +42,7 @@ class InviteTech extends React.Component {
   componentDidMount() {
     const {body} = this.props.location;
     if (!isEmpty(body)) {
-      console.log('techId:', body);
+      // console.log('techId:', body);
       this.fetchData(body.technicalInterview);
     }
   }
@@ -53,7 +53,7 @@ class InviteTech extends React.Component {
     } else {
       findTechInfo(id)
         .then((response) => {
-          console.log('TechResult:', response);
+          // console.log('TechResult:', response);
           this.readOnly(response);
           if (response.docNo != null) {
             const files = [{
@@ -157,7 +157,7 @@ class InviteTech extends React.Component {
   handleSubmit = () => {
     const {techInfo, techNumber} = this.state;
     const fileInfo = this.state.fileList[0];
-    console.log('fileInfo: ', fileInfo);
+    // console.log('fileInfo: ', fileInfo);
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const object = {
@@ -225,7 +225,7 @@ class InviteTech extends React.Component {
           technicalEmpNo: techNumber,
         };
       }
-      console.log('postData: ', postData);
+      // console.log('postData: ', postData);
       this.props.dispatch({
         type: 'invite/saveTechDraft',
         payload: postData,

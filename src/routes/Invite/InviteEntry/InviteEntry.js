@@ -41,7 +41,7 @@ class InviteEntry extends React.Component {
         mentorNumber: coachid,
       };
       if (!err) {
-        console.log('putData: ', putData);
+        // console.log('putData: ', putData);
         this.props.dispatch({
           type: 'invite/isEntry',
           payload: putData,
@@ -76,7 +76,7 @@ class InviteEntry extends React.Component {
     if (name === '') {
       return;
     }
-    console.log('aaaaa: ', name);
+    // console.log('aaaaa: ', name);
     const vpSource = [];
     let vpid = '';
     queryLike(name)

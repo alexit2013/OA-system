@@ -53,7 +53,7 @@ class StaffTraining extends React.Component {
       },
     };
     object.onOk = () => {
-      console.log('onOk: ', this.state.emIds);
+      // console.log('onOk: ', this.state.emIds);
       if (this.state.emIds.length === 0) {
         message.error('请选择所需要删除的对象');
       } else {
@@ -63,7 +63,7 @@ class StaffTraining extends React.Component {
     confirm(object);
   };
   batchDelete = (arr) => { //  批量删除时调用
-    console.log('batchDelete: ', arr);
+    // console.log('batchDelete: ', arr);
     this.props.dispatch({
       type: 'probation/batchDelete',
       payload: arr,

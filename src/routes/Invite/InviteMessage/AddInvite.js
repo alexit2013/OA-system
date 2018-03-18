@@ -92,7 +92,7 @@ class AddInvite extends React.Component {
     }));
   }
   handleFileInfoChange = (info) => {
-    console.log('info: ', info);
+    // console.log('info: ', info);
     let {fileList} = info;
     fileList = fileList.slice(-1);
     fileList = fileList.map((it) => {
@@ -333,7 +333,7 @@ class AddInvite extends React.Component {
   };
   render() {
     const {inviter} = this.state;
-    console.log('inviter: ', inviter.name);
+    // console.log('inviter: ', inviter.name);
     const {getFieldDecorator} = this.props.form;
     const formItemLayout = {
       labelCol: {

@@ -18,7 +18,6 @@ export default {
         payload: true,
       });
       const response = yield call(getAllTrainplan);
-      console.log('res: ', response);
       yield put({
         type: 'saveProbationListToRedux',
         payload: response,
@@ -30,7 +29,6 @@ export default {
     },
     * fetchStep({payload}, {call, put}) { // 获取每个状态的信息
       const response = yield call(getSomeBodyTrainplan, payload);
-      console.log('stepData: ', response);
       yield put({
         type: 'saveProbationInfoToRedux',
         payload: response,
@@ -67,7 +65,6 @@ export default {
       });
     },
     * searchDate({payload}, {call, put}) { // 搜索框输入model
-      console.log('payload: ', payload);
       const response = yield call(getSrchvalueTrainplan, payload);
       yield put({
         type: 'saveProbationListToRedux',

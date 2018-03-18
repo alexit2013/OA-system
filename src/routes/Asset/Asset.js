@@ -13,7 +13,7 @@ class Asset extends React.Component {
   componentWillMount() {
     queryCurrentUser()
       .then((response) => {
-        // console.log(response);
+        console.log(response);
       });
   }
   getNavMenuItems(childrenRoute) {

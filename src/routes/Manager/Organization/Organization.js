@@ -246,7 +246,7 @@ class EditableTable extends React.Component {
         };
         editDepartment(body)
           .then((res) => {
-            console.log('res: ', res);
+            // console.log('res: ', res);
             if (res.status === 'ok') {
               message.success('修改成功');
               this.setState({data: newData});

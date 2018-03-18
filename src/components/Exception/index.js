@@ -4,9 +4,7 @@ import { Button } from 'antd';
 import config from './typeConfig';
 import styles from './index.less';
 
-console.log('linkElement: ');
 export default ({ className, linkElement = 'a', type, title, desc, img, actions, ...rest }) => {
-  console.log('linkElement: ', linkElement);
   const pageType = type in config ? type : '404';
   const clsString = classNames(styles.exception, className);
   return (

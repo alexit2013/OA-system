@@ -349,7 +349,7 @@ handleChangeTech = (value) => { // AutoComplete组件数据发生改变时调用
           qualificationNo,
           synthesizeNo,
         };
-        console.log('postData: ', postBody);
+        // console.log('postData: ', postBody);
         saveCenter(postBody)
           .then((response) => {
             if (response.status === 'ok') {
