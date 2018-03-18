@@ -4,6 +4,7 @@ import {connect} from 'dva';
 import {UsersInitMission, AssetDetails} from '../../../services/api';
 import {formatTime} from '../../../utils/timeUtil';
 import {getShowText} from '../../../utils/utils';
+import {filtrate} from '../../../utils/filterData';
 
 class TaskManage extends React.Component {
   state = {
@@ -164,8 +165,28 @@ class TaskManage extends React.Component {
     };
     const {List} = this.state; // Tabel的数据源
     const columns = [
-      {title: '发起人', dataIndex: 'initarorName', render: val => <span>{getShowText(val)}</span> },
-      {title: '接收人', dataIndex: 'accepterName', render: val => <span>{getShowText(val)}</span> },
+      {
+        title: '发起人',
+        dataIndex: 'initarorName',
+        filters: filtrate(List, 'initarorName'),
+        onFilter: (value, record) => {
+          if (record.initarorName === null || record.initarorName === '') {
+            return false;
+          }
+          return record.initarorName.indexOf(value) === 0;
+        },
+      },
+      {
+        title: '接收人',
+        dataIndex: 'accepterName',
+        filters: filtrate(List, 'accepterName'),
+        onFilter: (value, record) => {
+          if (record.accepterName === null || record.accepterName === '') {
+            return false;
+          }
+          return record.accepterName.indexOf(value) === 0;
+        },
+      },
       {
         title: '发起时间',
         dataIndex: 'initDate',
@@ -177,7 +198,17 @@ class TaskManage extends React.Component {
         render: val => <span>{formatTime(val)}</span>,
       },
       {title: '备注', dataIndex: 'grade', key: 'grade'},
-      {title: '状态', dataIndex: 'status', render: val => getShowTextStatus(val)},
+      {
+        title: '状态',
+        dataIndex: 'status',
+        filters: filtrate(List, 'status'),
+        onFilter: (value, record) => {
+          if (record.status === null || record.status === '') {
+            return false;
+          }
+          return record.status.indexOf(value) === 0;
+        },
+      },
       {
         title: '操作',
         render: item => (

@@ -98,11 +98,14 @@ class StepForm extends React.Component {
       if (!err) {
         postGoal(probationInfo)
           .then((res) => {
+            console.log('res: ', res);
             if (res.status === 'ok') {
               message.success('提交成功！');
               setTimeout(() => {
                 this.props.dispatch(routerRedux.push('/tabs/probation/probation-table'));
               }, 1000);
+            } else {
+              message.error(res.content);
             }
           });
       }
@@ -129,6 +132,8 @@ class StepForm extends React.Component {
             setTimeout(() => {
               this.props.dispatch(routerRedux.push('/tabs/probation/probation-table'));
             }, 1000);
+          } else {
+            message.error(res.content);
           }
         });
     }
@@ -148,6 +153,8 @@ class StepForm extends React.Component {
             setTimeout(() => {
               this.props.dispatch(routerRedux.push('/tabs/probation/probation-table'));
             }, 1000);
+          } else {
+            message.error(res.content);
           }
         });
     }
@@ -186,6 +193,8 @@ class StepForm extends React.Component {
             setTimeout(() => {
               this.props.dispatch(routerRedux.push('/tabs/probation/probation-table'));
             }, 1000);
+          } else {
+            message.error(res.content);
           }
         });
     }
@@ -197,7 +206,10 @@ class StepForm extends React.Component {
       .then((res) => {
         console.log('res: ', res);
         if (res.status === 'ok') {
-          this.props.dispatch(routerRedux('/tabs/probation/probation-table'));
+          this.props.dispatch(routerRedux.push('/tabs/probation/probation-table'));
+          message.success('操作成功,已驳回！');
+        } else {
+          message.error(res.content);
         }
       });
   }
@@ -210,6 +222,8 @@ class StepForm extends React.Component {
           setTimeout(() => {
             this.props.dispatch(routerRedux.push('/tabs/probation/probation-table'));
           }, 1000);
+        } else {
+          message.error(res.content);
         }
       });
   }

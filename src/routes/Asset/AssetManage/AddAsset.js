@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'dva';
-import {Button, DatePicker, Form, Input, notification, Select, Row, Col, AutoComplete, Modal} from 'antd';
+import {Button, DatePicker, Form, Input, notification, Select, Row, Col, AutoComplete, Modal, message} from 'antd';
 import moment from 'moment';
 import {isEmpty} from 'lodash';
 import {queryLike, AssetDetails} from '../../../services/api';
@@ -104,6 +104,9 @@ class AddAsset extends React.Component {
       if (!err) {
         if (this.state.edit) {
           values.aid = this.state.aid;
+          if (values.employeeNum === '') {
+            return message.error('使用者姓名不正确！');
+          }
           this.props.dispatch({
             type: 'asset/editAsset',
             payload: values,
@@ -166,6 +169,12 @@ class AddAsset extends React.Component {
             const temp = [];
             response.map((item) => {
               temp.push(item.name);
+              if (item.name === value.trim()) {
+                this.props.form.setFieldsValue({
+                  employeeNum: item.employeeNumber,
+                  department: item.station,
+                });
+              }
             });
             this.setState({
               dataSource: [...response],

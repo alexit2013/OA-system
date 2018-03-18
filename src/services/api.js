@@ -240,6 +240,18 @@ export const UsersAcceptMission = async () => { // 显示用户待确认的任�
   });
 };
 
+export const batchConfirm = async (mids) => { // 批量确认
+  return request(`/api/asset/batchConfirm/${mids}`, {
+    method: 'GET',
+  });
+};
+
+export const batchRefuse = async (mids) => { // 批量拒绝
+  return request(`/api/asset/batchReject/${mids}`, {
+    method: 'GET',
+  });
+};
+
 export const AssetDetails = async (aid) => { // 显示资产详情
   return request(`/api/asset/queryByAid/${aid}`, {
     method: 'GET',
@@ -312,31 +324,31 @@ export const saveCenter = async (params) => { // 招聘中心操作
   });
 };
 
-export const findTechInfo = async (id) => { // 招聘中心操作
+export const findTechInfo = async (id) => { // 请求技术面试信息
   return request(`/api/resource/findByIdTe/${id}`, {
     method: 'GET',
   });
 };
-export const findQualInfo = async (id) => { // 招聘中心操作
+export const findQualInfo = async (id) => { // 请求业务面试信息
   return request(`/api/resource/findByIdQu/${id}`, {
     method: 'GET',
   });
 };
-export const findCompInfo = async (id) => { // 招聘中心操作
+export const findCompInfo = async (id) => { // 请求综合面试信息
   return request(`/api/resource/findByIdSy/${id}`, {
     method: 'GET',
   });
 };
 
 export const saveTechnbicalInviter = async (params) => { // 保存技术面试信息
-  return request('/api/resource/saveTechnbical', {
+  return request('/api/resource/saveTechnical', {
     method: 'POST',
     body: params,
   });
 };
 
-export const saveTechnbicalDraft = async (params) => { // 保存技术面试信息为草稿
-  return request('/api/resource/saveTechnbicalDraft', {
+export const saveTechnicalDraft = async (params) => { // 保存技术面试信息为草稿
+  return request('/api/resource/saveTechnicalDraft', {
     method: 'POST',
     body: params,
   });
@@ -348,6 +360,7 @@ export const saveQualificationInviter = async (params) => { // 保存资格面�
     body: params,
   });
 };
+
 
 export const saveQualificationDraft = async (params) => { // 保存资格面试信息为草稿
   return request('/api/resource/saveQualificationDraft', {
@@ -610,13 +623,19 @@ export const batchDeleteProbation = async (ids) => { // 批量删除培养阶段
 };
 
 export const returntosummarize = async (id) => { // 主管驳回员工总结
-  return request(`/api/trainrecord/returntosummarize/${id}`, {
+  return request(`/api/trainrecord/tosummarize/${id}`, {
     method: 'GET',
   });
 };
 
 export const becomeRegalar = async (id) => { // 转正
-  return request(`/api/trainplan/becomeRegular/${id}`, {
+  return request(`/api/trainplan/becomeregular/${id}`, {
+    method: 'GET',
+  });
+};
+
+export const dismission = async (id) => { // 离职
+  return request(`/api/trainplan/dismission/${id}`, {
     method: 'GET',
   });
 };

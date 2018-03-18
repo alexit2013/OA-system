@@ -61,9 +61,14 @@ class InviteCenter extends React.Component {
   }
   handleStr = (str) => {
     if (str) {
-      const tempArr = str.split(',');
-      const resultStr = `面试结论：${tempArr[1]}；是否进入下一环节：${tempArr[0]}`;
-      return resultStr;
+      let resultStr = '';
+      if (str !== '已保存为草稿') {
+        const tempArr = str.split(',');
+        resultStr = `面试结论：${tempArr[1]}；是否进入下一环节：${tempArr[0]}`;
+        return resultStr;
+      } else {
+        return str;
+      }
     } else {
       return null;
     }
@@ -320,13 +325,13 @@ handleChangeTech = (value) => { // AutoComplete组件数据发生改变时调用
             });
           this.setState({recordNo: ''}); // 联系人工号置空;
         }
+        this.setState({visible: false});
       }
       values = null;
     });
     if (loading) {
       this.fetchComRecord(this.props.location.id);
     }
-    this.setState({visible: false});
     this.setState({recordInfo: {}});
   }
   handleCancel = () => {
@@ -344,6 +349,7 @@ handleChangeTech = (value) => { // AutoComplete组件数据发生改变时调用
           qualificationNo,
           synthesizeNo,
         };
+        console.log('postData: ', postBody);
         saveCenter(postBody)
           .then((response) => {
             if (response.status === 'ok') {
@@ -420,7 +426,7 @@ handleChangeTech = (value) => { // AutoComplete组件数据发生改变时调用
             onCancel={this.handleCancel}
             width={680}
           >
-            <Form style={{marginLeft: 40}} onSubmit={this.handleOk}>
+            <Form style={{marginLeft: 40}}>
               <table border="1" style={{border: '1px solid #eee'}}>
                 <tbody>
                   <tr height="25px">
@@ -533,8 +539,9 @@ handleChangeTech = (value) => { // AutoComplete组件数据发生改变时调用
                 <tr height="40">
                   <td colSpan="4" className={styles.tdm} >面试记录</td>
                   <td colSpan="4" className={styles.tdm} >面试官</td>
+                  <td colSpan="4" className={styles.tdm} >计划面试时间</td>
                   <td colSpan="4" className={styles.tdm} >开始面试</td>
-                  <td colSpan="12" className={styles.tdml}>结果</td>
+                  <td colSpan="8" className={styles.tdml}>结果</td>
                 </tr>
                 <tr height="40">
                   <td colSpan="4" className={styles.td}>技术面试</td>
@@ -555,8 +562,18 @@ handleChangeTech = (value) => { // AutoComplete组件数据发生改变时调用
                       )}
                     </FormItem>
                   </td>
+                  <td colSpan="4" className={styles.td}>
+                    <FormItem style={{height: 40, margin: 0}}
+                    >
+                      {getFieldDecorator('technicalerPlan', {
+                        initialValue: moment(inviteInformation.technicalerPlan),
+                      })(
+                        <DatePicker placeholder="计划面试时间" />
+                      )}
+                    </FormItem>
+                  </td>
                   <td colSpan="4" className={styles.td}><a onClick={() => {this.skip('tech')}}>技术面试</a></td>
-                  <td colSpan="12" className={styles.td}>
+                  <td colSpan="8" className={styles.td}>
                     {this.handleStr(inviteInformation.technicalResult)}
                   </td>
                 </tr>
@@ -564,7 +581,7 @@ handleChangeTech = (value) => { // AutoComplete组件数据发生改变时调用
                   <td colSpan="4" className={styles.td}>资格面试</td>
                   <td colSpan="4" className={styles.td}>
                     <FormItem
-                      style={{height: 40, margin: 0,padding: 0}}
+                      style={{height: 40, margin: 0, padding: 0}}
                     >
                       {getFieldDecorator('qualificationName', {
                         initialValue: inviteInformation.qualificationName,
@@ -579,8 +596,18 @@ handleChangeTech = (value) => { // AutoComplete组件数据发生改变时调用
                       )}
                     </FormItem>
                   </td>
-                  <td colSpan="4" className={styles.td}><a onClick={() => {this.skip('qual')}}>资格面试</a></td>
-                  <td colSpan="12" className={styles.td}>{this.handleStr(inviteInformation.qualificationResult)}</td>
+                  <td colSpan="4" className={styles.td}>
+                    <FormItem style={{height: 40, margin: 0}}
+                    >
+                      {getFieldDecorator('qualificationPlan', {
+                        initialValue: moment(inviteInformation.qualificationPlan),
+                      })(
+                        <DatePicker placeholder="计划面试时间" />
+                      )}
+                    </FormItem>
+                  </td>
+                  <td colSpan="4" className={styles.td}><a onClick={() => { this.skip('qual'); }}>资格面试</a></td>
+                  <td colSpan="8" className={styles.td}>{this.handleStr(inviteInformation.qualificationResult)}</td>
                 </tr>
                 <tr height="40">
                   <td colSpan="4" className={styles.td}>综合面试</td>
@@ -601,8 +628,18 @@ handleChangeTech = (value) => { // AutoComplete组件数据发生改变时调用
                       )}
                     </FormItem>
                   </td>
-                  <td colSpan="4" className={styles.td}><a onClick={() => {this.skip('comp')}}>综合面试</a></td>
-                  <td colSpan="12" className={styles.td}>{this.handleStr(inviteInformation.synthesizeResult)}</td>
+                  <td colSpan="4" className={styles.td}>
+                    <FormItem style={{height: 40, margin: 0}}
+                    >
+                      {getFieldDecorator('synthesizePlan', {
+                        initialValue: moment(inviteInformation.synthesizePlan),
+                      })(
+                        <DatePicker placeholder="计划面试时间" />
+                      )}
+                    </FormItem>
+                  </td>
+                  <td colSpan="4" className={styles.td}><a onClick={() => {this.skip('comp'); }}>综合面试</a></td>
+                  <td colSpan="8" className={styles.td}>{this.handleStr(inviteInformation.synthesizeResult)}</td>
                 </tr>
                 <tr height="40">
                   <td colSpan="24" align="center" className={styles.head}>

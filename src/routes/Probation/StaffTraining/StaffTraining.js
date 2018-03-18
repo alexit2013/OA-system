@@ -1,9 +1,9 @@
 import React from 'react';
 import {routerRedux} from 'dva/router';
 import { connect } from 'dva';
-import {Table, Badge, Icon, message, Modal, Button, Input} from 'antd';
+import {Table, Badge, Icon, message, Modal, Button, Input, Divider} from 'antd';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
-import { becomeRegalar} from '../../../services/api';
+import { becomeRegalar, dismission } from '../../../services/api';
 
 
 const {confirm} = Modal;
@@ -41,7 +41,7 @@ class StaffTraining extends React.Component {
       <Button onClick={this.showDeleteConfirm}>
         <Icon type="delete" />批量删除
       </Button>
-    )
+    );
   }
   showDeleteConfirm = () => { // 批量删除时弹出的modal
     const object = {
@@ -72,11 +72,14 @@ class StaffTraining extends React.Component {
   };
   handleSearch = (e) => { // 搜索框处理逻辑
     const value = e.trim();
-    console.log('value: ', value);
-    this.props.dispatch({
-      type: 'probation/searchDate',
-      payload: value,
-    });
+    if (value === '') {
+      this.fetchData();
+    } else {
+      this.props.dispatch({
+        type: 'probation/searchDate',
+        payload: value,
+      });
+    }
   }
   searchData = () => {
     return (
@@ -90,12 +93,13 @@ class StaffTraining extends React.Component {
       </div>
     );
   };
-  showConfirm = (item) => { //  批量删除时弹出的modal
+  showConfirmReg = (item) => { //  确认转正的时候弹出的modal
     const object = {
       title: '确定要转正吗？',
       okText: '确定',
       okType: 'danger',
       cancelText: '取消',
+      style: {marginTop: '180px'},
       onCancel() {
         console.log('ok');
       },
@@ -107,6 +111,33 @@ class StaffTraining extends React.Component {
           if (res.status === 'ok') {
             message.success('操作成功！');
             this.fetchData();
+          } else {
+            message.error('对不起您没有权限操作！');
+          }
+        });
+    };
+    confirm(object);
+  };
+  showConfirmDis = (item) => { //  选择离职的时候弹出的modal
+    const object = {
+      title: '确定选择离职吗？',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      style: {marginTop: '180px'},
+      onCancel() {
+        console.log('ok');
+      },
+    };
+    object.onOk = () => {
+      const id = item.trainRecords[0].emid;
+      dismission(id)
+        .then((res) => {
+          if (res.status === 'ok') {
+            message.success('操作成功！');
+            this.fetchData();
+          } else {
+            message.error('对不起您没有权限操作');
           }
         });
     };
@@ -147,18 +178,11 @@ class StaffTraining extends React.Component {
       let childData = [];
       childData = probationList[j].trainRecords;
       j += 1;
-      if (j === probationList.length - 1) {
+      if (j > probationList.length - 1) {
         j = 0;
       }
-      // const cbKeys = (keys) => {
-      //   console.log('keys', keys);
-      //   this.setState({
-      //     emIds: [...keys],
-      //   });
-      // };
       return (
         <Table
-          // cbKeys={cbKeys}
           rowKey={record => record.id}
           pagination={false}
           columns={childColumns}
@@ -184,8 +208,13 @@ class StaffTraining extends React.Component {
       { title: '评价结果', dataIndex: 'result', key: 'result' },
       {
         title: '操作',
+        align: 'center',
         render: item => (
-          <a onClick={() => this.showConfirm(item)}>转正</a>
+          <span>
+            <a onClick={() => this.showConfirmReg(item)}>转正</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.showConfirmDis(item)}>离职</a>
+          </span>
         ),
       },
     ];
@@ -209,7 +238,6 @@ class StaffTraining extends React.Component {
 
     return (
       <div style={{width: '100%'}}>
-        {/* {this.layoutDelete()} */}
         {this.searchData()}
         <Table
           className="components-table-demo-nested"
@@ -224,4 +252,3 @@ class StaffTraining extends React.Component {
 }
 
 export default StaffTraining;
-// ReactDOM.render(<StaffTraining />, document.getElementById('root'));

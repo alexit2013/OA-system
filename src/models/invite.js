@@ -1,7 +1,7 @@
 import {routerRedux} from 'dva/router';
 import {message} from 'antd';
 import {getMessageInviter, saveInviter, deleteInviter, inviterInfo, queryNameInviter, saveSynthesizeInviter, saveQualificationInviter, saveTechnbicalInviter, batchDeleteInviter, queryInviter, saveNeedInviter, findAllNeedInviter, deleteNeedInviter, batchDeleteNeedInviter, weekInviter, dateWeekInviter, weekDepInviter, dateDepWeekInviter, saveRecordInviter,
-entryInviter, operateEntryInviter, ziyuanchi, NeedLikeInviter, saveSynthesizeDraft, saveTechnbicalDraft, saveQualificationDraft} from '../services/api';
+entryInviter, operateEntryInviter, ziyuanchi, NeedLikeInviter, saveSynthesizeDraft, saveTechnicalDraft, saveQualificationDraft} from '../services/api';
 export default {
   namespace: 'invite',
   state: {
@@ -216,7 +216,7 @@ export default {
         id: payload.zid,
       }));
     },
-    * saveCompDraft({payload}, {call, put}) {
+    * saveCompDraft({payload}, {call, put}) { // 保存综合面试草稿
       yield call(saveSynthesizeDraft, payload);
       message.success('保存成功');
       yield put(routerRedux.push({
@@ -232,7 +232,7 @@ export default {
         id: payload.zid,
       }));
     },
-    * saveQualDraft({payload}, {call, put}) {
+    * saveQualDraft({payload}, {call, put}) { // 保存业务面试草稿
       yield call(saveQualificationDraft, payload);
       message.success('保存成功');
       yield put(routerRedux.push({
@@ -248,8 +248,8 @@ export default {
         id: payload.zid,
       }));
     },
-    * saveTechDraft({payload}, {call, put}) {
-      yield call(saveTechnbicalDraft, payload);
+    * saveTechDraft({payload}, {call, put}) { // 保存技术面试草稿
+      yield call(saveTechnicalDraft, payload);
       message.success('保存成功');
       yield put(routerRedux.push({
         pathname: '/tabs/invite/invite-center',

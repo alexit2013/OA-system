@@ -3,7 +3,8 @@ import { Modal, Table, Row, Col, message } from 'antd';
 import {connect} from 'dva';
 import {AssetDetails, HistoryMassion} from '../../../services/api';
 import {formatTime} from '../../../utils/timeUtil';
-import {getShowText} from '../../../utils/utils';
+// import {getShowText} from '../../../utils/utils';
+import {filtrate} from '../../../utils/filterData';
 
 class HistoryTaskManage extends React.Component {
   state = {
@@ -32,6 +33,9 @@ class HistoryTaskManage extends React.Component {
         }
       });
   };
+  filter = (pagination, filters, sorter) => {
+    console.log('pagination: ', pagination, 'filters: ', filters, 'sorter: ', sorter);
+  }
   AssetDetailContent = (data) => {
     if (this.state.flag) {
       return message.error('对不起该资产已被管理员删除');
@@ -146,20 +150,40 @@ class HistoryTaskManage extends React.Component {
   };
   render() {
     const {List} = this.state;
-    const getShowTextStatus = (val) => {
-      if (val === '接受') {
-        return (
-          <span style={{color: '#11ee55'}}>已接收</span>
-        );
-      } else {
-        return (
-          <span style={{color: 'red'}}>已拒绝</span>
-        );
-      }
-    };
+    // const getShowTextStatus = (val) => {
+    //   if (val === '接受') {
+    //     return (
+    //       <span style={{color: '#11ee55'}}>已接收</span>
+    //     );
+    //   } else {
+    //     return (
+    //       <span style={{color: 'red'}}>已拒绝</span>
+    //     );
+    //   }
+    // };
     const columns = [
-      {title: '发起人', dataIndex: 'initarorName', render: val => <span>{getShowText(val)}</span>},
-      {title: '接收人', dataIndex: 'accepterName', render: val => <span>{getShowText(val)}</span>},
+      {
+        title: '发起人',
+        dataIndex: 'initarorName',
+        filters: filtrate(List, 'initarorName'),
+        onFilter: (value, record) => {
+          if (record.initarorName === null || record.initarorName === '') {
+            return false;
+          }
+          return record.initarorName.indexOf(value) === 0;
+        },
+      },
+      {
+        title: '接收人',
+        dataIndex: 'accepterName',
+        filters: filtrate(List, 'accepterName'),
+        onFilter: (value, record) => {
+          if (record.accepterName === null || record.accepterName === '') {
+            return false;
+          }
+          return record.accepterName.indexOf(value) === 0;
+        },
+      },
       {
         title: '分配时间',
         dataIndex: 'initDate',
@@ -173,7 +197,13 @@ class HistoryTaskManage extends React.Component {
       {
         title: '状态',
         dataIndex: 'status',
-        render: val => (getShowTextStatus(val)),
+        filters: filtrate(List, 'status'),
+        onFilter: (value, record) => {
+          if (record.status === null || record.status === '') {
+            return false;
+          }
+          return record.status.indexOf(value) === 0;
+        },
       },
       {
         title: '操作',
@@ -190,6 +220,7 @@ class HistoryTaskManage extends React.Component {
           rowKey={record => record.mid}
           columns={columns}
           dataSource={List}
+          onChange={this.filter}
         />
       </div>
     );

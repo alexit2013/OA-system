@@ -40,6 +40,7 @@ class InviteComp extends React.Component {
     } else {
       findCompInfo(id)
         .then((response) => {
+          console.log('res: ', response);
           this.readOnly(response);
           if (!isEmpty(response.docNo)) {
             const files = [{
@@ -73,15 +74,12 @@ class InviteComp extends React.Component {
             const temp = [];
             response.map((item) => {
               temp.push(item.name);
+              if (value.trim() === item.name) {
+                this.setState({compNumber: item.employeeNumber});
+              }
             });
             this.setState({
               nameSource: [...temp],
-            });
-          } else if (Object.prototype.toString.call(response) === '[object Object]') {
-            const temp = [];
-            temp.push(response);
-            this.setState({
-              nameSource: [response.name],
             });
           }
         });
@@ -118,8 +116,14 @@ class InviteComp extends React.Component {
   };
   readOnly = (data) => {
     if (!isEmpty(data)) {
+      if (data.isDraft === '是') {
+        this.setState({disabled: false});
+        return;
+      }
       if (!isHr() && !isAdmin()) {
         this.setState({disabled: true});
+      } else {
+        this.setState({disabled: false});
       }
     }
   }
@@ -169,44 +173,38 @@ class InviteComp extends React.Component {
   DraftSubmit = () => { // 提交表单时调用
     const {compInfo, compNumber} = this.state;
     const fileInfo = this.state.fileList[0];
-    this.props.form.validateFields((err, values) => {
-      console.log('values: ', values);
-      if (!err) {
-        const object = {
-          title: '确定要保存为草稿吗？',
-          okText: '确定',
-          cancelText: '取消',
-          onCancel() {
-            // console.log('Cancel');
-          },
+    const values = this.props.form.getFieldsValue();
+    const object = {
+      title: '确定要保存为草稿吗？',
+      okText: '确定',
+      cancelText: '取消',
+      onCancel() {
+        console.log('Cancel');
+      },
+    };
+    object.onOk = () => {
+      let postData = {};
+      if (!isEmpty(fileInfo)) {
+        postData = {
+          ...compInfo,
+          ...values,
+          docNo: fileInfo.fileId,
+          title: fileInfo.name,
+          synthesizeEmpNo: compNumber,
         };
-        object.onOk = () => {
-          let postData = {};
-          if (!isEmpty(fileInfo)) {
-            postData = {
-              ...compInfo,
-              ...values,
-              docNo: fileInfo.fileId,
-              title: fileInfo.name,
-              synthesizeEmpNo: compNumber,
-            };
-          } else {
-            postData = {
-              ...compInfo,
-              ...values,
-              synthesizeEmpNo: compNumber,
-            };
-          }
-          this.props.dispatch({
-            type: 'invite/saveCompDraft',
-            payload: postData,
-          });
-        };
-        confirm(object);
       } else {
-        message.error('保存失败...');
+        postData = {
+          ...compInfo,
+          ...values,
+          synthesizeEmpNo: compNumber,
+        };
       }
-    });
+      this.props.dispatch({
+        type: 'invite/saveCompDraft',
+        payload: postData,
+      });
+    };
+    confirm(object);
   }
   renderButton = () => {
     const {disabled} = this.state;

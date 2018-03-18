@@ -201,12 +201,28 @@ class InviteEntry extends React.Component {
                   {...formItemLayout}
                   label="招聘类型"
                 >
-                  {getFieldDecorator('rescruitType', {
+                  {getFieldDecorator('recruitmentType', {
+
                   })(
                     <Select>
                       <Option value="社招">社招</Option>
                       <Option value="应届">应届</Option>
                       <Option value="猎头">猎头</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem
+                  {...formItemLayout}
+                  label="雇佣关系"
+                >
+                  {getFieldDecorator('employmentType', {
+                  })(
+                    <Select>
+                      <Option value="全职">全职</Option>
+                      <Option value="实习">实习</Option>
+                      <Option value="兼职">兼职</Option>
                     </Select>
                   )}
                 </FormItem>

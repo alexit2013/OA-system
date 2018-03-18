@@ -42,6 +42,7 @@ class InviteTech extends React.Component {
   componentDidMount() {
     const {body} = this.props.location;
     if (!isEmpty(body)) {
+      console.log('techId:', body);
       this.fetchData(body.technicalInterview);
     }
   }
@@ -52,6 +53,7 @@ class InviteTech extends React.Component {
     } else {
       findTechInfo(id)
         .then((response) => {
+          console.log('TechResult:', response);
           this.readOnly(response);
           if (response.docNo != null) {
             const files = [{
@@ -113,6 +115,9 @@ class InviteTech extends React.Component {
             const temp = [];
             response.map((item) => {
               temp.push(item.name);
+              if (value.trim() === item.name) {
+                this.setState({ techNumber: item.employeeNumber });
+              }
             });
             this.setState({
               nameSource: [...temp],
@@ -194,45 +199,40 @@ class InviteTech extends React.Component {
   DraftSubmit = () => {
     const {techInfo, techNumber} = this.state;
     const fileInfo = this.state.fileList[0];
-    console.log('fileInfo: ', fileInfo);
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const object = {
-          title: '确定要保存为草稿吗吗？',
-          okText: '确定',
-          cancelText: '取消',
-          onCancel() {
-            console.log('Cancel');
-          },
+    const values = this.props.form.getFieldsValue();
+    const object = {
+      title: '确定要保存为草稿吗？',
+      okText: '确定',
+      cancelText: '取消',
+      onCancel() {
+        console.log('Cancel');
+      },
+    };
+    object.onOk = () => {
+      let postData = {};
+      if (fileInfo) {
+        postData = {
+          ...techInfo,
+          ...values,
+          docNo: fileInfo.fileId,
+          title: fileInfo.name,
+          technicalEmpNo: techNumber,
         };
-        object.onOk = () => {
-          let postData = {};
-          if (fileInfo) {
-            postData = {
-              ...techInfo,
-              ...values,
-              docNo: fileInfo.fileId,
-              title: fileInfo.name,
-              technicalEmpNo: techNumber,
-            };
-          } else {
-            postData = {
-              ...techInfo,
-              ...values,
-              technicalEmpNo: techNumber,
-            };
-          }
-          this.props.dispatch({
-            type: 'invite/saveTechDraft',
-            payload: postData,
-          });
-        };
-        confirm(object);
       } else {
-        message.error('保存失败...');
+        postData = {
+          ...techInfo,
+          ...values,
+          technicalEmpNo: techNumber,
+        };
       }
-    });
-  }
+      console.log('postData: ', postData);
+      this.props.dispatch({
+        type: 'invite/saveTechDraft',
+        payload: postData,
+      });
+    };
+    confirm(object);
+}
   renderButton = () => {
     const {disabled} = this.state;
     if (disabled) {

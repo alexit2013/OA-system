@@ -122,6 +122,9 @@ class InviteTech extends React.Component {
             const temp = [];
             response.map((item) => {
               temp.push(item.name);
+              if (value.trim() === item.name) {
+                this.setState({qualNumber: item.employeeNumber});
+              }
             });
             this.setState({
               nameSource: [...temp],
@@ -190,51 +193,44 @@ class InviteTech extends React.Component {
   DraftSubmit = () => {
     const {qualInfo, qualNumber} = this.state;
     const fileInfo = this.state.fileList[0];
-    this.props.form.validateFields((err, values) => {
-      console.log('values.papersVaildate1', values);
-      let papersVaildate1 = '';
-      if (values.papersVaildate1 !== undefined) {
-        papersVaildate1 = values.papersVaildate1.join(',');
-      }
-      if (!err) {
-        const object = {
-          title: '确定要保存为草稿吗吗？',
-          okText: '确定',
-          cancelText: '取消',
-          onCancel() {
-            console.log('Cancel');
-          },
+    const values = this.props.form.getFieldsValue();
+    let papersVaildate1 = '';
+    if (values.papersVaildate1 !== undefined) {
+      papersVaildate1 = values.papersVaildate1.join(',');
+    }
+    const object = {
+      title: '确定要保存为草稿吗吗？',
+      okText: '确定',
+      cancelText: '取消',
+      onCancel() {
+        console.log('Cancel');
+      },
+    };
+    object.onOk = () => {
+      let postData = {};
+      if (fileInfo) {
+        postData = {
+          ...qualInfo,
+          ...values,
+          papersVaildate1,
+          docNo: fileInfo.fileId,
+          title: fileInfo.name,
+          qualificationEmpNo: qualNumber,
         };
-        object.onOk = () => {
-          // this.handleSubmit();
-          let postData = {};
-          if (fileInfo) {
-            postData = {
-              ...qualInfo,
-              ...values,
-              papersVaildate1,
-              docNo: fileInfo.fileId,
-              title: fileInfo.name,
-              qualificationEmpNo: qualNumber,
-            };
-          } else {
-            postData = {
-              ...qualInfo,
-              ...values,
-              papersVaildate1,
-              qualificationEmpNo: qualNumber,
-            };
-          }
-          this.props.dispatch({
-            type: 'invite/saveQualDraft',
-            payload: postData,
-          });
-        };
-        confirm(object);
       } else {
-        message.error('保存失败...');
+        postData = {
+          ...qualInfo,
+          ...values,
+          papersVaildate1,
+          qualificationEmpNo: qualNumber,
+        };
       }
-    });
+      this.props.dispatch({
+        type: 'invite/saveQualDraft',
+        payload: postData,
+      });
+    };
+    confirm(object);
   };
 
   showConfirm = () => {

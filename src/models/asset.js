@@ -1,6 +1,6 @@
 import {routerRedux} from 'dva/router';
 import { message } from 'antd';
-import { addAsset, deleteAsset, batchDeleteAsset, editAsset, showAssetUser, showUser, UsersInitMission, AssetAllocStatus, UsersAcceptMission, AssetSearch} from '../services/api';
+import { addAsset, deleteAsset, batchDeleteAsset, editAsset, showAssetUser, showUser, UsersInitMission, AssetAllocStatus, UsersAcceptMission, AssetSearch, batchConfirm, batchRefuse} from '../services/api';
 
 export default {
   namespace: 'asset',
@@ -104,13 +104,11 @@ export default {
         type: 'changeLoading',
         payload: true,
       });
-      const body = yield payload.body;
+      const body = yield payload.body.join(',');
       if (payload.name === 'accept') {
-        yield call(_, body);
+        yield call(batchConfirm, body);
       } else if (payload.name === 'delete') {
-        yield call(_, body);
-      } else {
-        yield call(_, body);
+        yield call(batchRefuse, body);
       }
       const list = yield select(state => state.asset.list);
       yield put({
@@ -118,7 +116,7 @@ export default {
         payload: [...list].filter((it) => {
           let flag = false;
           for (let i = 0; i < payload.length; i += 1) {
-            if (it.mid === body[i]) {
+            if (it.mid === payload.body[i]) {
               flag = true;
             }
           }

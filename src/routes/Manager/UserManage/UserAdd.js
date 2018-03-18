@@ -130,12 +130,12 @@ class UserAdd extends React.Component {
     queryLike(name)
       .then((res) => {
         res.map((it) => {
-          if (it.name === name ) {
+          if (it.name === name) {
             this.props.form.setFieldsValue({
               directorNumber: it.employeeNumber,
             });
           }
-        })
+        });
       })
   }
   mentorChange = (e) => {
@@ -143,13 +143,13 @@ class UserAdd extends React.Component {
     queryLike(name)
       .then((res) => {
         res.map((it) => {
-          if (it.name === name ) {
+          if (it.name === name) {
             this.props.form.setFieldsValue({
               mentorNumber: it.employeeNumber,
             });
           }
-        })
-      })
+        });
+      });
   }
   render() {
     const SelectOption = Select.Option;
@@ -769,7 +769,7 @@ class UserAdd extends React.Component {
               {...formItemLayout}
               label="雇佣关系"
             >
-              {getFieldDecorator('employeeStatus', {
+              {getFieldDecorator('employmentType', {
                 initialValue: user.employeeStatus,
               })(
                 <Select
@@ -781,6 +781,7 @@ class UserAdd extends React.Component {
                 >
                   <SelectOption value="全职">全职</SelectOption>
                   <SelectOption value="实习生">实习</SelectOption>
+                  <SelectOption value="兼职">兼职</SelectOption>
                 </Select>
               )}
             </FormItem>
@@ -875,7 +876,7 @@ class UserAdd extends React.Component {
               {...formItemLayout}
               label="当前状态"
             >
-              {getFieldDecorator('basicSalary', {
+              {getFieldDecorator('employeeStatus', {
                 initialValue: user.basicSalary,
               })(
                 <Select
@@ -886,6 +887,7 @@ class UserAdd extends React.Component {
                 >
                   <SelectOption value="试用中">试用中</SelectOption>
                   <SelectOption value="已转正">已转正</SelectOption>
+                  <SelectOption value="已离职">已离职</SelectOption>
                 </Select>
               )}
             </FormItem>
@@ -904,7 +906,7 @@ class UserAdd extends React.Component {
               </Button>
             </FormItem>
           </Col>
-          <Col span={8}></Col>
+          <Col span={8}>{}</Col>
           <Col span={8}>
             <FormItem {...submitFormLayout}>
               <Button

@@ -4,7 +4,8 @@ import {Button, Divider, Icon, message, Modal, Input, Row, Col} from 'antd';
 import TableAsset from '../../../components/Table/Table';
 import {AssetDetails} from '../../../services/api';
 import {formatTime} from '../../../utils/timeUtil';
-import {getShowText} from '../../../utils/utils';
+// import {getShowText} from '../../../utils/utils';
+import {filtrate} from '../../../utils/filterData';
 
 const {confirm} = Modal;
 const {Search} = Input;
@@ -229,35 +230,57 @@ class VerifyTaskManage extends React.Component {
     return (
       <div style={{marginBottom: 10}}>
         <Button onClick={() => this.showDeleteConfirm('accept', '确定要接受吗？')}>
-          <Icon type="plus" />批量接受
+          <Icon type="check" />批量接受
         </Button>
-        <Button style={{marginLeft: 10}} onClick={() => this.showDeleteConfirm('reject', '确定要拒绝吗？')}>
-          <Icon type="warning"/>批量拒绝
+        <Button style={{marginLeft: 5}} onClick={() => this.showDeleteConfirm('reject', '确定要拒绝吗？')}>
+          <Icon type="close" />批量拒绝
         </Button>
-        <Button style={{marginLeft: 10}} onClick={() => this.showDeleteConfirm('delete', '确定要删除吗？')}>
-          <Icon type="delete" /> 批量删除
-        </Button>
-        <Search
-          enterButton
-          style={{marginLeft: '8%', width: '25%' }}
-          placeholder="岗位名称/一级部门/二级部门"
-          onSearch={this.handleSearch}
-        />
       </div>
     );
   }
   render() {
     const {asset: {loading, verifylist}} = this.props;
     const columns = [
-      {title: '当前使用人', dataIndex: 'initarorName', render: val => <span>{getShowText(val)}</span>,},
-      {title: '转移接收人', dataIndex: 'accepterName', render: val => <span>{getShowText(val)}</span>,},
+      {
+        title: '当前使用人',
+        dataIndex: 'initarorName',
+        filters: filtrate(verifylist, 'initarorName'),
+        onFilter: (value, record) => {
+          if (record.initarorName === null || record.initarorName === '') {
+            return false;
+          }
+          return record.initarorName.indexOf(value) === 0;
+        },
+      },
+      {
+        title: '转移接收人',
+        dataIndex: 'accepterName',
+        filters: filtrate(verifylist, 'accepterName'),
+        onFilter: (value, record) => {
+          if (record.accepterName === null || record.accepterName === '') {
+            return false;
+          }
+          return record.accepterName.indexOf(value) === 0;
+        },
+      },
       {
         title: '分配时间',
         dataIndex: 'initDate',
         render: val => <span> {formatTime(val)} </span>,
       },
       {title: '备注', dataIndex: 'remarks', key: 'remarks'},
-      {title: '状态', dataIndex: 'status', width: '100px', render: val => <span style={{color:'orange'}}>{val}</span>},
+      {
+        title: '状态',
+        dataIndex: 'status',
+        width: '100px',
+        filters: filtrate(verifylist, 'status'),
+        onFilter: (value, record) => {
+          if (record.status === null || record.status === '') {
+            return false;
+          }
+          return record.status.indexOf(value) === 0;
+        },
+      },
       {
         title: '操作',
         align: 'center',

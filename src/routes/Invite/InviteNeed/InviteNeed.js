@@ -122,7 +122,9 @@ class InviteNeed extends React.Component {
       });
     }
   }
-
+  // departmentLink = (needlist) => {
+  //   const tempDepartment = filtrate(needlist, 'sdepartment');
+  // }
   render() {
     const fetch = this.fetchData;
     const {invite: { needlist, loading }} = this.props;
@@ -150,7 +152,6 @@ class InviteNeed extends React.Component {
         emIds: [...keys],
       });
     };
-
     const columns = [{
       title: '招聘需求编码',
       dataIndex: 'hcNo',
