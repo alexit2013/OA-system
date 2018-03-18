@@ -100,4 +100,4 @@ export const FOOT_LINK = [{
 }];
 
 export const FOOT_COPYRIGHT = <div>Copyright <Icon type="copyright"/> 2017 赛诺微医疗科技有限公司</div>;
-export const FOOT_TIME = <div><Icon type="cloud-upload-o" />Build at 2018-02-09 20:35 </div>;
+export const FOOT_TIME = <div><Icon type="cloud-upload-o" />Build at 2018-3-18 20:00 </div>;

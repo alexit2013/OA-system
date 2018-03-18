@@ -133,21 +133,13 @@ class EditableTable extends React.Component {
   fetchDate = () => {
     FindAllDepartment()
       .then((response) => {
+        response.map((it, i) => {
+          it.key = it.id;
+        });
         data = response;
         this.setState({data});
       });
-    // this.props.dispatch({
-    //   type: 'invite/findAllOrgan',
-    // });
   }
-  // handleChange(value, column, key) {
-  //   const newData = [...this.state.data];
-  //   const target = newData.filter(item => key === item.key)[0];
-  //   if (target) {
-  //     target[column] = value;
-  //     this.setState({ data: newData });
-  //   }
-  // }
   edit(key) {
     const newData = [...this.state.data];
     const target = newData.filter(item => key === item.key)[0];
@@ -333,7 +325,6 @@ class EditableTable extends React.Component {
         {this.layoutHead()}
         {this.layoutButton()}
         <Table
-          rowKey={record => record.id}
           cbKeys={cbKeys}
           bordered
           dataSource={this.state.data}
